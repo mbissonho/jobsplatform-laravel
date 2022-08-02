@@ -7,13 +7,11 @@ use App\Http\Requests\Api\JobListRequest;
 use App\Http\Resources\Api\JobsCollecion;
 use App\Models\Job;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class JobController extends Controller
 {
 
-    protected const DEFAULT_FILTER_LIMIT = 20;
-    protected const DEFAULT_FILTER_OFFSET = 0;
+    protected const DEFAULT_JOBS_PER_PAGE = 10;
 
     /**
      * Display global listing of the jobs.
@@ -25,12 +23,15 @@ class JobController extends Controller
     {
         $filter = collect($request->validated());
 
-        $limit = $this->getLimit($filter);
-        $offset = $this->getOffset($filter);
+        $list = Job::with('skills');
 
-        $list = Job::list($limit, $offset);
-
-        return new JobsCollecion($list->get());
+        if($skillId = $filter->get('skill_id')) {
+            $list->havingSkill($skillId);
+        }
+        return new JobsCollecion(
+            $list
+            ->paginate(!$request->has('per_page') ? self::DEFAULT_JOBS_PER_PAGE : null)->withQueryString()
+        );
     }
 
     /**
@@ -76,29 +77,6 @@ class JobController extends Controller
     public function destroy(Job $job)
     {
         //
-    }
-
-
-    /**
-     * Get limit from filter.
-     *
-     * @param \Illuminate\Support\Collection<string, string> $filter
-     * @return int
-     */
-    private function getLimit(Collection $filter): int
-    {
-        return (int) ($filter['limit'] ?? static::DEFAULT_FILTER_LIMIT);
-    }
-
-    /**
-     * Get offset from filter.
-     *
-     * @param \Illuminate\Support\Collection<string, string> $filter
-     * @return int
-     */
-    private function getOffset(Collection $filter): int
-    {
-        return (int) ($filter['offset'] ?? static::DEFAULT_FILTER_OFFSET);
     }
 
 }

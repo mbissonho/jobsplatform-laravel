@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Http\Requests\PaginableRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class JobListRequest extends PaginableRequest
+class JobListRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,6 +13,6 @@ class JobListRequest extends PaginableRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules(), []);
+        return ['skill_id' => 'sometimes|integer|min:1'];
     }
 }

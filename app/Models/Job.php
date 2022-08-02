@@ -9,24 +9,32 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Jobs
  *
- * @method static Builder|Job list(int $take, int $skip)
+ * @method static Builder|Job havingSkill(int $skillId)
  *
  */
 class Job extends Model
 {
     use HasFactory;
 
+
+    /**
+     * Get skills for the job
+     */
+    public function skills(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class);
+    }
+
     /**
      * @param Builder $query
-     * @param int $take
-     * @param int $skip
+     * @param int $skillId
      * @return Builder
      */
-    public function scopeList(Builder $query, int $take, int $skip): Builder
+    public function scopeHavingSkill(Builder $query, int $skillId): Builder
     {
-        return $query->latest()
-            ->limit($take)
-            ->offset($skip);
+        return $query->whereHas('skills', fn(Builder $builder) =>
+            $builder->where('skills.id', $skillId)
+        );
     }
 
 }
