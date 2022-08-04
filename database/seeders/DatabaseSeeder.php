@@ -23,8 +23,27 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Job::factory(50)
-            ->has(Skill::factory()->count(4))
-            ->create();
+        Job::factory()->count(50)->create();
+
+        $magento2Skill = Skill::factory()->createOne([
+            'name' => 'Magento 2'
+        ]);
+
+        $remoteBigCompanyJob = Job::factory()
+            ->remote()
+            ->fromBigCompany()
+            ->createOne();
+
+        $remoteStartupJob = Job::factory()
+            ->remote()
+            ->fromStartup()
+            ->createOne();
+
+        $magento2Skill->jobs()->attach([
+            $remoteBigCompanyJob->id,
+            $remoteStartupJob->id
+        ]);
+
+
     }
 }

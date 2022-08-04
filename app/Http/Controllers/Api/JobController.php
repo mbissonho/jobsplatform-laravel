@@ -7,6 +7,8 @@ use App\Http\Requests\Api\JobListRequest;
 use App\Http\Resources\Api\JobsCollecion;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class JobController extends Controller
 {
@@ -23,14 +25,23 @@ class JobController extends Controller
     {
         $filter = collect($request->validated());
 
+
+
+        /* @var Builder|Job $list */
+
         $list = Job::with('skills');
 
         if($skillId = $filter->get('skill_id')) {
             $list->havingSkill($skillId);
         }
+
+        if($isRemote = $filter->get('remote')) {
+            $list->isRemote($isRemote);
+        }
+
         return new JobsCollecion(
             $list
-            ->paginate(!$request->has('per_page') ? self::DEFAULT_JOBS_PER_PAGE : null)->withQueryString()
+            ->paginate($this->getPerPage($filter))->withQueryString()
         );
     }
 
@@ -77,6 +88,18 @@ class JobController extends Controller
     public function destroy(Job $job)
     {
         //
+    }
+
+
+    /**
+     * Get per page param from filtered request data
+     *
+     * @param \Illuminate\Support\Collection<string, string> $filter
+     * @return int|null
+     */
+    private function getPerPage(Collection $filter): int|null
+    {
+        return !$filter->has('per_page') ? self::DEFAULT_JOBS_PER_PAGE : null;
     }
 
 }

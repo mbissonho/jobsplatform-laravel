@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * Jobs
  *
  * @method static Builder|Job havingSkill(int $skillId)
+ * @method static Builder|Job isRemote(bool $isRemote)
  *
  */
 class Job extends Model
@@ -35,6 +36,17 @@ class Job extends Model
         return $query->whereHas('skills', fn(Builder $builder) =>
             $builder->where('skills.id', $skillId)
         );
+    }
+
+
+    /**
+     * @param Builder $query
+     * @param bool $isRemote
+     * @return Builder
+     */
+    public function scopeIsRemote(Builder $query, bool $isRemote): Builder
+    {
+        return $query->where('remote', $isRemote);
     }
 
 }
