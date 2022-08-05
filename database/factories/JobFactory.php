@@ -63,9 +63,9 @@ class JobFactory extends Factory
     /**
      * Indicate that the job is from big company.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return JobFactory
      */
-    public function fromStartup(): Factory
+    public function fromStartup(): self
     {
         return $this->state(function (){
             return [
@@ -73,5 +73,34 @@ class JobFactory extends Factory
             ];
         });
     }
+
+    /**
+     * Indicate that the job require senior developer.
+     *
+     * @return JobFactory
+     */
+    public function requireSenior(): self
+    {
+        return $this->state(function (){
+            return [
+                'experience_level' => ExperienceLevel::SENIOR
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the job require junior developer.
+     *
+     * @return JobFactory
+     */
+    public function requireJunior(): self
+    {
+        return $this->state(function (){
+            return [
+                'experience_level' => ExperienceLevel::JUNIOR
+            ];
+        });
+    }
+
 
 }

@@ -25,14 +25,24 @@ class JobController extends Controller
     {
         $filter = collect($request->validated());
 
-
-
         /* @var Builder|Job $list */
 
         $list = Job::with('skills');
 
         if($skillId = $filter->get('skill_id')) {
-            $list->havingSkill($skillId);
+            $list->requireSkill($skillId);
+        }
+
+        if($skillId = $filter->get('company_size')) {
+            $list->ofCompanySize($skillId);
+        }
+
+        if($skillId = $filter->get('contract_type')) {
+            $list->withContractType($skillId);
+        }
+
+        if($skillId = $filter->get('experience_level')) {
+            $list->requireExperienceLevel($skillId);
         }
 
         if($isRemote = $filter->get('remote')) {

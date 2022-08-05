@@ -33,7 +33,15 @@ return new class extends Migration
     public function down()
     {
         Schema::table('jobs', function (Blueprint $table) {
-            //
+            $table->dropColumn(
+                [
+                    'remote',
+                    'accept_candidates_from_outside',
+                    'company_size',
+                    'contract_type',
+                    'experience_level'
+                ]
+            );
         });
     }
 };

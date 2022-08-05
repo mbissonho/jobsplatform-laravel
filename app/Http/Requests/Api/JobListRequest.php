@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Api\CompanySizeRule;
+use App\Rules\Api\ContractTypeRule;
+use App\Rules\Api\ExperienceLevelRule;
 
-class JobListRequest extends FormRequest
+class JobListRequest extends AbstractApiRequest
 {
 
     /**
@@ -16,7 +18,11 @@ class JobListRequest extends FormRequest
     {
         return [
             'skill_id' => 'sometimes|integer|min:1',
-            'remote' => 'sometimes|boolean'
+            'remote' => 'sometimes|boolean',
+            'company_size' => ['sometimes', new CompanySizeRule()],
+            'contract_type' => ['sometimes', new ContractTypeRule()],
+            'experience_level' => ['sometimes', new ExperienceLevelRule()],
         ];
     }
+
 }
