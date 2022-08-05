@@ -4,15 +4,15 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class JobsCollecion extends ResourceCollection
+class SkillsCollection extends ResourceCollection
 {
-    public static $wrap = 'jobs';
+    public static $wrap = 'skills';
 
     /**
      * The resource that this resource collects.
      *
      * @var string
      */
-    public $collects = JobResource::class;
+    public $collects = SkillResource::class;
 
 }

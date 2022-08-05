@@ -23,7 +23,7 @@ class JobListTest extends TestCase
     public function test_a_user_can_search_jobs_and_receive_a_paginable_result()
     {
         $response = $this->get(
-            route('api.jobs.list', ['page' => 5])
+            route('api.jobs.search', ['page' => 5])
         );
 
         $response
@@ -31,7 +31,7 @@ class JobListTest extends TestCase
             ->assertJsonCount(10, 'jobs')
             ->assertJsonStructure([
                 'jobs' => [
-                    ['id', 'title', 'created_at', 'updated_at']
+                    ['id', 'title']
                 ]
             ])
             ->assertJsonPath('links.next', null);
@@ -52,7 +52,7 @@ class JobListTest extends TestCase
             ]);
 
         $response = $this->get(
-            route('api.jobs.list', ['page' => 1, 'skill_id' => $magento2Skill->id])
+            route('api.jobs.search', ['page' => 1, 'skill_id' => $magento2Skill->id])
         );
 
         $response
@@ -99,7 +99,7 @@ class JobListTest extends TestCase
         // Assert can search two magento 2 remote jobs
 
         $responseTwoRemoteMagento2Jobs = $this->get(
-            route('api.jobs.list', ['remote' => 1, 'skill_id' => $magento2Skill->id])
+            route('api.jobs.search', ['remote' => 1, 'skill_id' => $magento2Skill->id])
         );
 
         $responseTwoRemoteMagento2Jobs
@@ -109,7 +109,7 @@ class JobListTest extends TestCase
         // Assert can search one magento 2 job from big company
 
         $responseOneMagento2JobFromBigCompany = $this->getJson(
-            route('api.jobs.list', ['company_size' => CompanySize::BIG, 'skill_id' => $magento2Skill->id])
+            route('api.jobs.search', ['company_size' => CompanySize::BIG, 'skill_id' => $magento2Skill->id])
         );
 
         $responseOneMagento2JobFromBigCompany
@@ -119,7 +119,7 @@ class JobListTest extends TestCase
         // Assert can search two magento 2 jobs that require junior developers
 
         $responseTwoMagento2JobRequireJunior = $this->getJson(
-            route('api.jobs.list', ['experience_level' => ExperienceLevel::JUNIOR, 'skill_id' => $magento2Skill->id])
+            route('api.jobs.search', ['experience_level' => ExperienceLevel::JUNIOR, 'skill_id' => $magento2Skill->id])
         );
 
         $responseTwoMagento2JobRequireJunior
@@ -130,7 +130,7 @@ class JobListTest extends TestCase
     public function test_user_should_send_correct_values_to_search_jobs_by_company_size_contract_type_and_experience_type()
     {
         $responseCompanySize = $this->get(
-            route('api.jobs.list', ['company_size' => 'wrong value'])
+            route('api.jobs.search', ['company_size' => 'wrong value'])
         );
 
         $responseCompanySize
@@ -138,7 +138,7 @@ class JobListTest extends TestCase
             ->assertSee(CompanySize::OPTIONS);
 
         $responseContractType = $this->get(
-            route('api.jobs.list', ['contract_type' => 'wrong value'])
+            route('api.jobs.search', ['contract_type' => 'wrong value'])
         );
 
         $responseContractType
@@ -147,7 +147,7 @@ class JobListTest extends TestCase
 
 
         $responseExperienceLevel = $this->get(
-            route('api.jobs.list', ['experience_level' => 'wrong value'])
+            route('api.jobs.search', ['experience_level' => 'wrong value'])
         );
 
         $responseExperienceLevel

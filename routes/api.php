@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\SkillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +19,12 @@ use App\Http\Controllers\Api\JobController;
 Route::name('api.')->group(function (){
 
     Route::name('jobs.')->group(function (){
+        Route::get('jobs', [JobController::class, 'index'])->name('search');
+    });
 
-        Route::get('jobs', [JobController::class, 'index'])->name('list');
+    Route::name('skills.')->group(function (){
+
+        Route::get('skills', [SkillController::class, 'index'])->name('all');
 
     });
 

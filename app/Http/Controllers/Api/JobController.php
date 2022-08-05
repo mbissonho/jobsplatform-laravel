@@ -16,7 +16,7 @@ class JobController extends Controller
     protected const DEFAULT_JOBS_PER_PAGE = 10;
 
     /**
-     * Display global listing of the jobs.
+     * Search jobs.
      *
      * @param JobListRequest $request
      * @return JobsCollecion<Job>
