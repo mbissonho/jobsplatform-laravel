@@ -135,6 +135,7 @@ class SearchJobsTest extends TestCase
 
         $responseCompanySize
             ->assertUnprocessable()
+            ->assertJsonValidationErrors(['company_size'])
             ->assertSee(CompanySize::OPTIONS);
 
         $responseContractType = $this->get(
@@ -143,6 +144,7 @@ class SearchJobsTest extends TestCase
 
         $responseContractType
             ->assertUnprocessable()
+            ->assertJsonValidationErrors(['contract_type'])
             ->assertSee(ContractType::OPTIONS);
 
 
@@ -152,6 +154,7 @@ class SearchJobsTest extends TestCase
 
         $responseExperienceLevel
             ->assertUnprocessable()
+            ->assertJsonValidationErrors(['experience_level'])
             ->assertSee(ExperienceLevel::OPTIONS);
     }
 

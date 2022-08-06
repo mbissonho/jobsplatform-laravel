@@ -35,7 +35,8 @@ class AuthTest extends TestCase
             route('api.auth.candidate.register'),
             $this->userData
         )
-        ->assertUnprocessable();
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['email']);
     }
 
 }
