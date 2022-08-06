@@ -39,4 +39,42 @@ class AuthTest extends TestCase
         ->assertJsonValidationErrors(['email']);
     }
 
+    public function test_user_can_login_and_receive_a_token_by_passing_valid_credentials()
+    {
+        $this->registerWithUserData();
+
+        $this->postJson(
+            route('api.auth.candidate.login'),
+            Arr::only($this->userData, ['email', 'password'])
+        )
+        ->assertOk()
+        ->assertSee('plainTextToken');
+    }
+
+    public function test_user_cannot_login_with_invalid_credentials()
+    {
+        $this->postJson(
+            route('api.auth.candidate.login'),
+            ['email' => 'invalid@mail.com', 'password' => 'wrong']
+        )
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['user']);
+    }
+
+    /**
+     * @param $userData
+     * @return false|string
+     */
+    private function registerWithUserData($userData = [])
+    {
+        if(empty($userData)) {
+            $userData = $this->userData;
+        }
+
+        return $this->postJson(
+            route('api.auth.candidate.register'),
+            $userData
+        )->getContent();
+    }
+
 }

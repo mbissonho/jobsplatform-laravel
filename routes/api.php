@@ -29,10 +29,7 @@ Route::name('api.')->group(function (){
 
     Route::name('auth.')->group(function (){
         Route::post('users', [AuthController::class, 'register'])->name('candidate.register');
+        Route::post('users/login', [AuthController::class, 'login'])->name('candidate.login');
     });
 
-});
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });
