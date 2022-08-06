@@ -6,7 +6,7 @@ use App\Rules\Api\CompanySizeRule;
 use App\Rules\Api\ContractTypeRule;
 use App\Rules\Api\ExperienceLevelRule;
 
-class JobListRequest extends AbstractApiRequest
+class SearchJobsRequest extends AbstractApiRequest
 {
 
     /**

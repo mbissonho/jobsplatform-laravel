@@ -10,7 +10,7 @@ use App\Models\Skill;
 use Tests\TestCase;
 use Illuminate\Testing\TestResponse;
 
-class JobListTest extends TestCase
+class SearchJobsTest extends TestCase
 {
 
     protected function setUp(): void

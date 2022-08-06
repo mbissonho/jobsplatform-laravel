@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +24,11 @@ Route::name('api.')->group(function (){
     });
 
     Route::name('skills.')->group(function (){
-
         Route::get('skills', [SkillController::class, 'index'])->name('all');
+    });
 
+    Route::name('auth.')->group(function (){
+        Route::post('users', [AuthController::class, 'register'])->name('candidate.register');
     });
 
 });

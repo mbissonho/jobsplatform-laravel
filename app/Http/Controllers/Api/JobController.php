@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\JobListRequest;
+use App\Http\Requests\Api\SearchJobsRequest;
 use App\Http\Resources\Api\JobsCollecion;
 use App\Models\Job;
 use Illuminate\Http\Request;
@@ -18,10 +18,10 @@ class JobController extends Controller
     /**
      * Search jobs.
      *
-     * @param JobListRequest $request
+     * @param SearchJobsRequest $request
      * @return JobsCollecion<Job>
      */
-    public function index(JobListRequest $request)
+    public function index(SearchJobsRequest $request)
     {
         $filter = collect($request->validated());
 
