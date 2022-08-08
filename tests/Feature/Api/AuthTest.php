@@ -16,7 +16,7 @@ class AuthTest extends TestCase
         'password_confirmation' => '12345678'
     ];
 
-    public function test_user_can_register()
+    public function test_user_can_register_yourself()
     {
         $this->postJson(
             route('api.auth.candidate.register'),
@@ -62,10 +62,10 @@ class AuthTest extends TestCase
     }
 
     /**
-     * @param $userData
+     * @param array $userData
      * @return false|string
      */
-    private function registerWithUserData($userData = [])
+    private function registerWithUserData(array $userData = []): bool|string
     {
         if(empty($userData)) {
             $userData = $this->userData;

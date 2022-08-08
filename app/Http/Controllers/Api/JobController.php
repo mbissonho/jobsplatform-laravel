@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SearchJobsRequest;
 use App\Http\Resources\Api\JobsCollecion;
+use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,17 +57,6 @@ class JobController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Job  $job
@@ -77,27 +67,18 @@ class JobController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Job $job)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
+     * Apply candidate to a given job.
      *
      * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function applyCandidateTo(Job $job)
     {
-        //
+        Application::create([
+            'user_id' => auth()->user()->id,
+            'job_id' => $job->id
+        ]);
     }
 
 

@@ -21,6 +21,7 @@ class Job extends Model
     use HasFactory;
 
 
+
     /**
      * Get skills for the job
      */
