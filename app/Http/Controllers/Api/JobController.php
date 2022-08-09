@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SearchJobsRequest;
+use App\Http\Resources\Api\JobResource;
 use App\Http\Resources\Api\JobsCollecion;
 use App\Models\Application;
 use App\Models\Job;
@@ -66,11 +67,11 @@ class JobController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\Api\JobResource
      */
     public function show(Job $job)
     {
-        //
+        return new JobResource($job);
     }
 
 

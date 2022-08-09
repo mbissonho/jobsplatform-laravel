@@ -24,7 +24,10 @@ class JobResource extends JsonResource
             'company_size' => $this->resource->company_size,
             'contract_type' => $this->resource->contract_type,
             'experience_level' => $this->resource->experience_level,
-            'required_skills' => new SkillsCollection($this->resource->skills)
+            'required_skills' => new SkillsCollection($this->resource->skills),
+            $this->mergeWhen($request->route()->getName() == 'api.jobs.get-by-id', [
+                'description' => $this->resource->description
+            ])
         ];
     }
 }

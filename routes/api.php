@@ -21,6 +21,7 @@ Route::name('api.')->group(function (){
 
     Route::name('jobs.')->group(function (){
         Route::get('jobs', [JobController::class, 'index'])->name('search');
+        Route::get('jobs/{job}', [JobController::class, 'show'])->name('get-by-id');
         Route::post('jobs/{job}/applications', [JobController::class, 'applyCandidateTo'])->name('candidate.apply-to-job');
     });
 

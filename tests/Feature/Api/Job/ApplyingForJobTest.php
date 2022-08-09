@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ApplyingForJobTest extends TestCase
 {
-
     private User $user;
 
     private Job $job;
@@ -24,7 +23,7 @@ class ApplyingForJobTest extends TestCase
     public function test_unauthenticated_user_cannot_apply_to_a_job()
     {
         $this->postJson(
-                "api/v1/jobs/{$this->job->id}/applications"
+            route('api.jobs.candidate.apply-to-job', ['job' => $this->job->id]),
             )
             ->assertUnauthorized()
             ->assertSee('Unauthenticated');
@@ -34,7 +33,7 @@ class ApplyingForJobTest extends TestCase
     {
         $this->actingAs($this->user)
             ->postJson(
-            "api/v1/jobs/{$this->job->id}/applications"
+            route('api.jobs.candidate.apply-to-job', ['job' => $this->job->id]),
         )
         ->assertOk();
 
@@ -45,7 +44,7 @@ class ApplyingForJobTest extends TestCase
     {
         $this->actingAs($this->user)
             ->postJson(
-                "api/v1/jobs/356/applications",
+                route('api.jobs.candidate.apply-to-job', ['job' => 356]),
                 [],
                 [
                     ['accept' => 'application/json']

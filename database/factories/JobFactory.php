@@ -28,6 +28,7 @@ class JobFactory extends Factory
             'company_size' => $this->faker->randomElement(CompanySize::OPTIONS),
             'contract_type' => $this->faker->randomElement(ContractType::OPTIONS),
             'experience_level' => $this->faker->randomElement(ExperienceLevel::OPTIONS),
+            'description' => $this->faker->text()
         ];
     }
 
