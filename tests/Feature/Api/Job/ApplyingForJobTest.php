@@ -23,7 +23,11 @@ class ApplyingForJobTest extends TestCase
 
     public function test_unauthenticated_user_cannot_apply_to_a_job()
     {
-
+        $this->postJson(
+                "api/v1/jobs/{$this->job->id}/applications"
+            )
+            ->assertUnauthorized()
+            ->assertSee('Unauthenticated');
     }
 
     public function test_authenticated_user_cannot_apply_to_a_job()
@@ -41,9 +45,14 @@ class ApplyingForJobTest extends TestCase
     {
         $this->actingAs($this->user)
             ->postJson(
-                "api/v1/jobs/356/applications"
+                "api/v1/jobs/356/applications",
+                [],
+                [
+                    ['accept' => 'application/json']
+                ]
             )
-            ->assertNotFound();
+            ->assertNotFound()
+            ->assertSee('Not Found');
     }
 
 }

@@ -7,12 +7,18 @@ use App\Http\Requests\Api\SearchJobsRequest;
 use App\Http\Resources\Api\JobsCollecion;
 use App\Models\Application;
 use App\Models\Job;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class JobController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['except' => [
+            'index', 'show'
+        ]]);
+    }
 
     protected const DEFAULT_JOBS_PER_PAGE = 10;
 
