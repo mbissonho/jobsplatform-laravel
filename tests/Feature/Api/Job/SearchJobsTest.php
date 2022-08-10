@@ -20,9 +20,9 @@ class SearchJobsTest extends TestCase
         Job::factory()->count(50)->create();
     }
 
-    public function test_a_user_can_search_jobs_and_receive_a_paginable_result()
+    public function test_user_can_search_jobs_and_receive_a_paginable_result()
     {
-        $response = $this->get(
+        $response = $this->getJson(
             route('api.jobs.search', ['page' => 5])
         );
 
@@ -39,7 +39,7 @@ class SearchJobsTest extends TestCase
         $this->assertSeePaginationJsonProperties($response);
     }
 
-    public function test_a_user_can_search_jobs_by_skill_and_receive_a_paginable_result()
+    public function test_user_can_search_jobs_by_skill_and_receive_a_paginable_result()
     {
         $countOfJobsThatRequireMagento2Skill = 5;
 
@@ -51,7 +51,7 @@ class SearchJobsTest extends TestCase
                 'name' => 'Magento 2'
             ]);
 
-        $response = $this->get(
+        $response = $this->getJson(
             route('api.jobs.search', ['page' => 1, 'skill_id' => $magento2Skill->id])
         );
 
@@ -98,7 +98,7 @@ class SearchJobsTest extends TestCase
 
         // Assert can search two magento 2 remote jobs
 
-        $responseTwoRemoteMagento2Jobs = $this->get(
+        $responseTwoRemoteMagento2Jobs = $this->getJson(
             route('api.jobs.search', ['remote' => 1, 'skill_id' => $magento2Skill->id])
         );
 
@@ -129,7 +129,7 @@ class SearchJobsTest extends TestCase
 
     public function test_user_should_send_correct_values_to_search_jobs_by_company_size_contract_type_and_experience_type()
     {
-        $responseCompanySize = $this->get(
+        $responseCompanySize = $this->getJson(
             route('api.jobs.search', ['company_size' => 'wrong value'])
         );
 
@@ -138,7 +138,7 @@ class SearchJobsTest extends TestCase
             ->assertJsonValidationErrors(['company_size'])
             ->assertSee(CompanySize::OPTIONS);
 
-        $responseContractType = $this->get(
+        $responseContractType = $this->getJson(
             route('api.jobs.search', ['contract_type' => 'wrong value'])
         );
 
@@ -148,7 +148,7 @@ class SearchJobsTest extends TestCase
             ->assertSee(ContractType::OPTIONS);
 
 
-        $responseExperienceLevel = $this->get(
+        $responseExperienceLevel = $this->getJson(
             route('api.jobs.search', ['experience_level' => 'wrong value'])
         );
 

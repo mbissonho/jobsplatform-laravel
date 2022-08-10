@@ -29,7 +29,7 @@ class ApplyingForJobTest extends TestCase
             ->assertSee('Unauthenticated');
     }
 
-    public function test_authenticated_user_cannot_apply_to_a_job()
+    public function test_authenticated_user_can_apply_to_a_job()
     {
         $this->actingAs($this->user)
             ->postJson(
