@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,9 +29,15 @@ Route::name('api.')->group(function (){
         Route::get('/', [SkillController::class, 'index'])->name('all');
     });
 
-    Route::group(['prefix' => 'auth/users', 'as' => 'auth.'], function (){
+    Route::group(['prefix' => 'users', 'as' => 'auth.'], function (){
         Route::post('/', [AuthController::class, 'register'])->name('candidate.register');
         Route::post('/login', [AuthController::class, 'login'])->name('candidate.login');
+    });
+
+    Route::group(['prefix' => 'candidates', 'as' => 'candidates.', 'middleware' => 'auth:sanctum'], function (){
+        Route::group(['prefix' => 'applications', 'as' => 'applications.'], function (){
+            Route::get('/', [ApplicationController::class, 'index'])->name('get-my-applications');
+        });
     });
 
 });

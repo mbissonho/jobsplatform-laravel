@@ -27,7 +27,17 @@ class Job extends Model
      */
     public function skills(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class)
+            ->withTimestamps();
+    }
+
+    /**
+     * Get job applications
+     */
+    public function applications(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'applications')
+            ->withTimestamps();
     }
 
     /**

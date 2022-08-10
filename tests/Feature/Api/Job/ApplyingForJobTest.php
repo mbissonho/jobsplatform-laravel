@@ -45,8 +45,7 @@ class ApplyingForJobTest extends TestCase
         $this->actingAs($this->user)
             ->postJson(
                 route('api.jobs.candidate.apply-to-job', ['job' => 356]),
-                [],
-                [
+                headers: [
                     ['accept' => 'application/json']
                 ]
             )

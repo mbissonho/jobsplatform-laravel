@@ -64,37 +64,11 @@ class SearchJobsTest extends TestCase
 
     public function test_user_can_search_jobs_by_several_criteria()
     {
-        //Create two Magento 2 remote jobs
-        //One from big company and another from startup
-        $magento2Skill = Skill::factory()->createOne([
-            'name' => 'Magento 2'
-        ]);
+        $this->seed();
 
-        $remoteBigCompanyJob = Job::factory()
-            ->remote()
-            ->fromBigCompany()
-            ->requireSenior()
-            ->createOne();
-
-        $remoteStartupJob = Job::factory()
-            ->remote()
-            ->fromStartup()
-            ->requireJunior()
-            ->createOne();
-
-        //Create one Magento 2 on-site job
-
-        $onSiteStartupJob = Job::factory()
-            ->remote(false)
-            ->fromStartup()
-            ->requireJunior()
-            ->createOne();
-
-        $magento2Skill->jobs()->attach([
-            $remoteBigCompanyJob->id,
-            $remoteStartupJob->id,
-            $onSiteStartupJob->id
-        ]);
+        $magento2Skill = Skill::query()
+            ->where('name','=','Magento 2')
+            ->first();
 
         // Assert can search two magento 2 remote jobs
 
@@ -156,12 +130,6 @@ class SearchJobsTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['experience_level'])
             ->assertSee(ExperienceLevel::OPTIONS);
-    }
-
-    private function assertSeePaginationJsonProperties(TestResponse $response)
-    {
-        $response
-            ->assertSee(['links', 'meta']);
     }
 
 }

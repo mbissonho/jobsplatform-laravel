@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return env('APP_NAME');
 });
+
+Route::name('login')->get('/login', function (){
+    return redirect('/');
+});
+

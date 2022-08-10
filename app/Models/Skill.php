@@ -14,7 +14,8 @@ class Skill extends Model
      */
     public function jobs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Job::class);
+        return $this->belongsToMany(Job::class)
+            ->withTimestamps();
     }
 
 }
