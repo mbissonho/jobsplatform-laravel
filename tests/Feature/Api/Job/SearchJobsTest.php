@@ -8,7 +8,6 @@ use App\Models\ExperienceLevel;
 use App\Models\Job;
 use App\Models\Skill;
 use Tests\TestCase;
-use Illuminate\Testing\TestResponse;
 
 class SearchJobsTest extends TestCase
 {
