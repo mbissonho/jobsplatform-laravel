@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Http\Requests\PaginableRequest;
-use Illuminate\Foundation\Http\FormRequest;
-
-class JobListRequest extends PaginableRequest
+class LoginRequest extends AbstractApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,6 +11,9 @@ class JobListRequest extends PaginableRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules(), []);
+        return [
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ];
     }
 }

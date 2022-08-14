@@ -3,102 +3,101 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\JobListRequest;
+use App\Http\Requests\Api\SearchJobsRequest;
+use App\Http\Resources\Api\JobResource;
 use App\Http\Resources\Api\JobsCollecion;
+use App\Models\Application;
 use App\Models\Job;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class JobController extends Controller
 {
 
-    protected const DEFAULT_FILTER_LIMIT = 20;
-    protected const DEFAULT_FILTER_OFFSET = 0;
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum', ['except' => [
+            'index', 'show'
+        ]]);
+    }
+
+    protected const DEFAULT_JOBS_PER_PAGE = 10;
 
     /**
-     * Display global listing of the jobs.
+     * Search jobs.
      *
-     * @param JobListRequest $request
+     * @param SearchJobsRequest $request
      * @return JobsCollecion<Job>
      */
-    public function index(JobListRequest $request)
+    public function index(SearchJobsRequest $request)
     {
         $filter = collect($request->validated());
 
-        $limit = $this->getLimit($filter);
-        $offset = $this->getOffset($filter);
+        /* @var Builder|Job $list */
 
-        $list = Job::list($limit, $offset);
+        $list = Job::with('skills');
 
-        return new JobsCollecion($list->get());
-    }
+        if($skillId = $filter->get('skill_id')) {
+            $list->requireSkill($skillId);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        if($skillId = $filter->get('company_size')) {
+            $list->ofCompanySize($skillId);
+        }
+
+        if($skillId = $filter->get('contract_type')) {
+            $list->withContractType($skillId);
+        }
+
+        if($skillId = $filter->get('experience_level')) {
+            $list->requireExperienceLevel($skillId);
+        }
+
+        if($isRemote = $filter->get('remote')) {
+            $list->isRemote($isRemote);
+        }
+
+        return new JobsCollecion(
+            $list
+            ->paginate($this->getPerPage($filter))->withQueryString()
+        );
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\Api\JobResource
      */
     public function show(Job $job)
     {
-        //
+        return new JobResource($job);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Job $job)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
+     * Apply candidate to a given job.
      *
      * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function applyCandidateTo(Job $job)
     {
-        //
+        Application::create([
+            'user_id' => auth()->user()->id,
+            'job_id' => $job->id
+        ]);
     }
 
 
     /**
-     * Get limit from filter.
+     * Get per page param from filtered request data
      *
      * @param \Illuminate\Support\Collection<string, string> $filter
-     * @return int
+     * @return int|null
      */
-    private function getLimit(Collection $filter): int
+    private function getPerPage(Collection $filter): int|null
     {
-        return (int) ($filter['limit'] ?? static::DEFAULT_FILTER_LIMIT);
-    }
-
-    /**
-     * Get offset from filter.
-     *
-     * @param \Illuminate\Support\Collection<string, string> $filter
-     * @return int
-     */
-    private function getOffset(Collection $filter): int
-    {
-        return (int) ($filter['offset'] ?? static::DEFAULT_FILTER_OFFSET);
+        return !$filter->has('per_page') ? self::DEFAULT_JOBS_PER_PAGE : null;
     }
 
 }

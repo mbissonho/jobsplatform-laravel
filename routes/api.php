@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
+use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\ApplicationController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +19,25 @@ use App\Http\Controllers\Api\JobController;
 
 Route::name('api.')->group(function (){
 
-    Route::name('jobs.')->group(function (){
-
-        Route::get('jobs', [JobController::class, 'index'])->name('list');
-
+    Route::group(['prefix' => 'jobs', 'as' => 'jobs.'], function (){
+        Route::get('/', [JobController::class, 'index'])->name('search');
+        Route::get('/{job}', [JobController::class, 'show'])->name('get-by-id');
+        Route::post('/{job}/applications', [JobController::class, 'applyCandidateTo'])->name('candidate.apply-to-job');
     });
 
-});
+    Route::group(['prefix' => 'skills', 'as' => 'skills.'], function (){
+        Route::get('/', [SkillController::class, 'index'])->name('all');
+    });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::group(['prefix' => 'users', 'as' => 'auth.'], function (){
+        Route::post('/', [AuthController::class, 'register'])->name('candidate.register');
+        Route::post('/login', [AuthController::class, 'login'])->name('candidate.login');
+    });
+
+    Route::group(['prefix' => 'candidates', 'as' => 'candidates.', 'middleware' => 'auth:sanctum'], function (){
+        Route::group(['prefix' => 'applications', 'as' => 'applications.'], function (){
+            Route::get('/', [ApplicationController::class, 'index'])->name('get-my-applications');
+        });
+    });
+
 });
