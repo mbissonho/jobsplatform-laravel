@@ -2,7 +2,7 @@
     "name": "mbissonho/jobs-platform-demo",
     "type": "project",
     "description": "A Jobs Plataform Demo Project",
-    "keywords": ["framework", "laravel"],
+    "keywords": ["framework", "laravel", "demo project", "jobs plataform"],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
