@@ -17,11 +17,11 @@ return new class extends Migration
     public function up()
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->boolean('remote')->nullable(false);
-            $table->boolean('accept_candidates_from_outside')->nullable(false);
-            $table->enum('company_size', CompanySize::OPTIONS);
-            $table->enum('contract_type', ContractType::OPTIONS);
-            $table->enum('experience_level', ExperienceLevel::OPTIONS);
+            $table->boolean('remote')->nullable(false)->default(false);
+            $table->boolean('accept_candidates_from_outside')->nullable(false)->default(false);
+            $table->enum('company_size', CompanySize::OPTIONS)->default(CompanySize::STARTUP);
+            $table->enum('contract_type', ContractType::OPTIONS)->default(ContractType::PJ);
+            $table->enum('experience_level', ExperienceLevel::OPTIONS)->default(ExperienceLevel::JUNIOR);
         });
     }
 
